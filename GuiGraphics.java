@@ -14,7 +14,7 @@ import javafx.stage.Stage;
 public class GuiGraphics extends Application implements UiManager {
 
     public static final int GRID_LINE_WIDTH = 3;
-    private static final Paint BACKGROUND_COLOR = Color.grayRgb(200, 0.5);
+    private static final Paint BACKGROUND_COLOR = Color.grayRgb(200, 1);
     public static final int TEXT_LENGTH = 300;
     public static final int INITIAL_WIDTH = 800;
     public static final int INITIAL_HEIGHT = 600;
@@ -26,8 +26,8 @@ public class GuiGraphics extends Application implements UiManager {
     private Label p2ScoreLabel;
     private HBox root;
     private Cell[][] board;
-    private Color p1Color;
-    private Color p2Color;
+    private Color p1Color = Color.BLUE;
+    private Color p2Color = Color.YELLOWGREEN;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -55,22 +55,30 @@ public class GuiGraphics extends Application implements UiManager {
 
             int x = (int) (mouseEvent.getX() / squareSize);
             int y = (int) (mouseEvent.getY() / squareSize);
-            drawCell(x, y, p1Color);
+            //todo remove this
+            board[x][y] = Cell.O;
+            drawBoard(board);
         });
     }
 
     private void setResizeHandler() {
         root.widthProperty().addListener((observable, oldValue, newValue) -> {
-//            double boardNewWidth = newValue.doubleValue() - 120;
-            canvas.setWidth(newValue.doubleValue() - TEXT_LENGTH);
-            canvas.setHeight(newValue.doubleValue() - TEXT_LENGTH);
-            drawBoard(board);
+            rszBoard();
         });
 
-//        root.heightProperty().addListener((observable, oldValue, newValue) -> {
-//            mazeBoard.setPrefHeight(newValue.doubleValue());
-//            mazeBoard.draw();
-//        });
+        root.heightProperty().addListener((observable, oldValue, newValue) -> {
+            rszBoard();
+        });
+
+
+;
+    }
+
+    private void rszBoard() {
+        double boardSize = Math.min(root.getWidth() - TEXT_LENGTH, root.getHeight());
+        canvas.setWidth(boardSize);
+        canvas.setHeight(boardSize);
+        drawBoard(board);
     }
 
     private void initUiElements(Stage primaryStage) {
@@ -82,7 +90,8 @@ public class GuiGraphics extends Application implements UiManager {
         p2ScoreLabel = new Label("p2 scores: 0");
         p2ScoreLabel.setFont(new Font("Arial", 30));
         root = new HBox();
-        canvas = new Canvas(INITIAL_WIDTH - TEXT_LENGTH, INITIAL_WIDTH - TEXT_LENGTH);
+        double boardSize = Math.min(INITIAL_HEIGHT, INITIAL_WIDTH- TEXT_LENGTH);
+        canvas = new Canvas(boardSize, boardSize);
         gc = canvas.getGraphicsContext2D();
         root.getChildren().add(canvas);
         VBox vBox = new VBox(currentPlayerLabel, p1ScoreLabel, p2ScoreLabel);
@@ -107,7 +116,6 @@ public class GuiGraphics extends Application implements UiManager {
     }
 
     private void drawGrid() {
-        int k;
         double size = canvas.getWidth();
         double rowSpacing = size / (rows);
         GraphicsContext gc = canvas.getGraphicsContext2D();
@@ -118,11 +126,6 @@ public class GuiGraphics extends Application implements UiManager {
             gc.strokeLine(i * rowSpacing, 0, i * rowSpacing, size);
         }
     }
-
-//    private void drawShapes(GraphicsContext gc) {
-//        gc.setFill(Color.YELLOW);
-//        gc.fillRect(0, 0, 600, 600);
-//    }
 
 
     public static void main(String[] args) {
