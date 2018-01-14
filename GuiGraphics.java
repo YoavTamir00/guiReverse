@@ -1,9 +1,13 @@
 
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -11,23 +15,33 @@ import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
+import java.util.concurrent.CountDownLatch;
+import java.util.function.BiConsumer;
+
 public class GuiGraphics extends Application implements UiManager {
 
     public static final int GRID_LINE_WIDTH = 3;
+    public static final int FONT_SIZE = 25;
     private static final Paint BACKGROUND_COLOR = Color.grayRgb(200, 1);
     public static final int TEXT_LENGTH = 300;
     public static final int INITIAL_WIDTH = 800;
     public static final int INITIAL_HEIGHT = 600;
+    public static final int MENU_WIDTH = 30;
     private double rows = 6;//is double to prevent unnecessary rounding
     private Canvas canvas;
     private GraphicsContext gc;
     private Label currentPlayerLabel;
     private Label p1ScoreLabel;
     private Label p2ScoreLabel;
-    private HBox root;
+    private HBox mainScreen;
     private Cell[][] board;
     private Color p1Color = Color.BLUE;
     private Color p2Color = Color.YELLOWGREEN;
+    private BiConsumer<Integer, Integer> boardClickListener = null;
+    private VBox root;
+    private SettingScreen settingScene;
+    private Scene gameScreen;
+
 
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -55,9 +69,10 @@ public class GuiGraphics extends Application implements UiManager {
 
             int x = (int) (mouseEvent.getX() / squareSize);
             int y = (int) (mouseEvent.getY() / squareSize);
-            //todo remove this
-            board[x][y] = Cell.O;
-            drawBoard(board);
+
+            if (boardClickListener != null) {
+                boardClickListener.accept(x, y);
+            }
         });
     }
 
@@ -75,7 +90,7 @@ public class GuiGraphics extends Application implements UiManager {
     }
 
     private void rszBoard() {
-        double boardSize = Math.min(root.getWidth() - TEXT_LENGTH, root.getHeight());
+        double boardSize = Math.min(root.getWidth() - TEXT_LENGTH, root.getHeight() - MENU_WIDTH);
         canvas.setWidth(boardSize);
         canvas.setHeight(boardSize);
         drawBoard(board);
@@ -84,19 +99,51 @@ public class GuiGraphics extends Application implements UiManager {
     private void initUiElements(Stage primaryStage) {
         primaryStage.setTitle("Reversi Game");
         currentPlayerLabel = new Label("Current Player: p1");
-        currentPlayerLabel.setFont(new Font("Arial", 30));
+        currentPlayerLabel.setFont(new Font("Arial", FONT_SIZE));
         p1ScoreLabel = new Label("p1 scores: 0");
-        p1ScoreLabel.setFont(new Font("Arial", 30));
+        p1ScoreLabel.setFont(new Font("Arial", FONT_SIZE));
         p2ScoreLabel = new Label("p2 scores: 0");
-        p2ScoreLabel.setFont(new Font("Arial", 30));
-        root = new HBox();
+        p2ScoreLabel.setFont(new Font("Arial", FONT_SIZE));
+        mainScreen = new HBox();
         double boardSize = Math.min(INITIAL_HEIGHT, INITIAL_WIDTH- TEXT_LENGTH);
         canvas = new Canvas(boardSize, boardSize);
         gc = canvas.getGraphicsContext2D();
-        root.getChildren().add(canvas);
+        mainScreen.getChildren().add(canvas);
         VBox vBox = new VBox(currentPlayerLabel, p1ScoreLabel, p2ScoreLabel);
-        root.getChildren().add(vBox);
-        primaryStage.setScene(new Scene(root, INITIAL_WIDTH, INITIAL_HEIGHT));
+        mainScreen.getChildren().add(vBox);
+
+        MenuBar menuBar = new MenuBar();
+        menuBar.prefWidthProperty().bind(primaryStage.widthProperty());
+        root = new VBox();
+        root.getChildren().add(menuBar);
+        root.getChildren().add(mainScreen);
+
+        settingScene = new SettingScreen(new VBox());
+
+        Menu menu = new Menu("screens");
+
+        ToggleGroup toggleGroup = new ToggleGroup();
+        RadioMenuItem settingMenu = new RadioMenuItem("setting screen");
+        settingMenu.setToggleGroup(toggleGroup);
+        settingMenu.setOnAction(actionEvent -> {
+            primaryStage.setScene(settingScene);
+
+
+        });
+
+        menu.getItems().add(settingMenu);
+        RadioMenuItem gameMenu = new RadioMenuItem("game screen");
+        gameMenu.setToggleGroup(toggleGroup);
+
+        gameMenu.setOnAction(e->{
+            primaryStage.setScene(gameScreen);
+        });
+        menu.getItems().add(gameMenu);
+
+        menuBar.getMenus().add(menu);
+
+        gameScreen = new Scene(root, INITIAL_WIDTH, INITIAL_HEIGHT);
+        primaryStage.setScene(gameScreen);
 
 
         drawBoard(board);
@@ -128,13 +175,17 @@ public class GuiGraphics extends Application implements UiManager {
     }
 
 
-    public static void main(String[] args) {
-        launch(args);
-    }
 
     @Override
-    public void showMessage(String message) {
+    public void showAlert(String message) {
+        Platform.runLater(() -> {
 
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("reversi");//maybe somthing else?
+            alert.setHeaderText(message);
+
+            alert.showAndWait();
+        });
     }
 
     @Override
@@ -155,11 +206,76 @@ public class GuiGraphics extends Application implements UiManager {
     @Override
     public void setP1Color(Color color) {
         p1Color = color;
+        drawBoard(board);
     }
 
     @Override
     public void setP2Color(Color color) {
         p2Color = color;
+        drawBoard(board);
+    }
 
+    @Override
+    public void setCurrentPlayer(boolean isP1) {
+        Platform.runLater(() -> {
+            currentPlayerLabel.setText("Current Player is: " + (isP1 ? "p1" : "p2"));
+        });
+
+    }
+
+    @Override
+    public void setP1Score(int score) {
+        Platform.runLater(() -> {
+            p1ScoreLabel.setText("p1 score: " + score);
+        });
+    }
+
+    @Override
+    public void setP2Score(int score) {
+        Platform.runLater(() -> {
+            p2ScoreLabel.setText("p2 score: " + score);
+        });
+    }
+
+    @Override
+    public void setBoardClickListener(BiConsumer<Integer, Integer> clickListener) {
+        this.boardClickListener = clickListener;
+    }
+
+
+    public static final CountDownLatch latch = new CountDownLatch(1);
+    public static GuiGraphics GuiGraphics = null;
+
+    public static GuiGraphics waitForGuiGraphics() {
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return GuiGraphics;
+    }
+
+    public static void setGuiGraphics(GuiGraphics GuiGraphics0) {
+        GuiGraphics = GuiGraphics0;
+        latch.countDown();
+    }
+
+    public GuiGraphics() {
+        setGuiGraphics(this);
+    }
+
+    public static void main(String[] args) {
+        Application.launch(args);
+    }
+
+    public static GuiGraphics getInstance() {
+        new Thread(() -> Application.launch(GuiGraphics.class)).start();
+        //UI takes time to load
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return waitForGuiGraphics();
     }
 }
