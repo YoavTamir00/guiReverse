@@ -2,7 +2,7 @@ import javafx.scene.paint.Color;
 
 import java.util.function.BiConsumer;
 
-public interface UiManager {
+public interface GameUiManager {
 
     void showAlert(String message);
     void drawBoard(Cell[][] board);

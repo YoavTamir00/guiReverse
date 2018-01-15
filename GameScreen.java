@@ -1,56 +1,59 @@
-
-import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.event.EventType;
-import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
-import javafx.stage.Stage;
 
-import java.util.concurrent.CountDownLatch;
 import java.util.function.BiConsumer;
 
-public class GuiGraphics extends Application implements UiManager {
-
-    public static final int GRID_LINE_WIDTH = 3;
+public class GameScreen extends HBox implements GameUiManager {
     public static final int FONT_SIZE = 25;
+    public static final int GRID_LINE_WIDTH = 3;
     private static final Paint BACKGROUND_COLOR = Color.grayRgb(200, 1);
     public static final int TEXT_LENGTH = 300;
     public static final int INITIAL_WIDTH = 800;
     public static final int INITIAL_HEIGHT = 600;
-    public static final int MENU_WIDTH = 30;
     private double rows = 6;//is double to prevent unnecessary rounding
     private Canvas canvas;
     private GraphicsContext gc;
     private Label currentPlayerLabel;
     private Label p1ScoreLabel;
     private Label p2ScoreLabel;
-    private HBox mainScreen;
+
     private Cell[][] board;
     private Color p1Color = Color.BLUE;
     private Color p2Color = Color.YELLOWGREEN;
     private BiConsumer<Integer, Integer> boardClickListener = null;
-    private VBox root;
-    private SettingScreen settingScene;
-    private Scene gameScreen;
 
+    public GameScreen(VBox root) {
+        super();
 
-    @Override
-    public void start(Stage primaryStage) throws Exception{
         initBoard();
-        initUiElements(primaryStage);
-        setResizeHandler();
+
+        currentPlayerLabel = new Label("Current Player: p1");
+        currentPlayerLabel.setFont(new Font("Arial", FONT_SIZE));
+        p1ScoreLabel = new Label("p1 scores: 0");
+        p1ScoreLabel.setFont(new Font("Arial", FONT_SIZE));
+        p2ScoreLabel = new Label("p2 scores: 0");
+        p2ScoreLabel.setFont(new Font("Arial", FONT_SIZE));
+        double boardSize = Math.min(INITIAL_HEIGHT, INITIAL_WIDTH- TEXT_LENGTH);
+        canvas = new Canvas(boardSize, boardSize);
+        gc = canvas.getGraphicsContext2D();
+        getChildren().add(canvas);
+        VBox vBox = new VBox(currentPlayerLabel, p1ScoreLabel, p2ScoreLabel);
+        getChildren().add(vBox);
+
+        setResizeHandler(root);
         setClickListener();
 
+        drawBoard(board);
     }
+
 
     private void initBoard() {
         board = new Cell[(int) rows][(int) rows];
@@ -76,79 +79,24 @@ public class GuiGraphics extends Application implements UiManager {
         });
     }
 
-    private void setResizeHandler() {
+    private void setResizeHandler(VBox root) {
         root.widthProperty().addListener((observable, oldValue, newValue) -> {
-            rszBoard();
+            rszBoard(root);
         });
 
         root.heightProperty().addListener((observable, oldValue, newValue) -> {
-            rszBoard();
+            rszBoard(root);
         });
 
 
-;
+        ;
     }
 
-    private void rszBoard() {
-        double boardSize = Math.min(root.getWidth() - TEXT_LENGTH, root.getHeight() - MENU_WIDTH);
+    private void rszBoard(VBox root) {
+        double boardSize = Math.min(root.getWidth() - TEXT_LENGTH, root.getHeight() - GuiManager.MENU_WIDTH);
         canvas.setWidth(boardSize);
         canvas.setHeight(boardSize);
         drawBoard(board);
-    }
-
-    private void initUiElements(Stage primaryStage) {
-        primaryStage.setTitle("Reversi Game");
-        currentPlayerLabel = new Label("Current Player: p1");
-        currentPlayerLabel.setFont(new Font("Arial", FONT_SIZE));
-        p1ScoreLabel = new Label("p1 scores: 0");
-        p1ScoreLabel.setFont(new Font("Arial", FONT_SIZE));
-        p2ScoreLabel = new Label("p2 scores: 0");
-        p2ScoreLabel.setFont(new Font("Arial", FONT_SIZE));
-        mainScreen = new HBox();
-        double boardSize = Math.min(INITIAL_HEIGHT, INITIAL_WIDTH- TEXT_LENGTH);
-        canvas = new Canvas(boardSize, boardSize);
-        gc = canvas.getGraphicsContext2D();
-        mainScreen.getChildren().add(canvas);
-        VBox vBox = new VBox(currentPlayerLabel, p1ScoreLabel, p2ScoreLabel);
-        mainScreen.getChildren().add(vBox);
-
-        MenuBar menuBar = new MenuBar();
-        menuBar.prefWidthProperty().bind(primaryStage.widthProperty());
-        root = new VBox();
-        root.getChildren().add(menuBar);
-        root.getChildren().add(mainScreen);
-
-        settingScene = new SettingScreen(new VBox());
-
-        Menu menu = new Menu("screens");
-
-        ToggleGroup toggleGroup = new ToggleGroup();
-        RadioMenuItem settingMenu = new RadioMenuItem("setting screen");
-        settingMenu.setToggleGroup(toggleGroup);
-        settingMenu.setOnAction(actionEvent -> {
-            primaryStage.setScene(settingScene);
-
-
-        });
-
-        menu.getItems().add(settingMenu);
-        RadioMenuItem gameMenu = new RadioMenuItem("game screen");
-        gameMenu.setToggleGroup(toggleGroup);
-
-        gameMenu.setOnAction(e->{
-            primaryStage.setScene(gameScreen);
-        });
-        menu.getItems().add(gameMenu);
-
-        menuBar.getMenus().add(menu);
-
-        gameScreen = new Scene(root, INITIAL_WIDTH, INITIAL_HEIGHT);
-        primaryStage.setScene(gameScreen);
-
-
-        drawBoard(board);
-
-        primaryStage.show();
     }
 
     private void drawCell(int x, int y, Color color) {
@@ -240,42 +188,5 @@ public class GuiGraphics extends Application implements UiManager {
     @Override
     public void setBoardClickListener(BiConsumer<Integer, Integer> clickListener) {
         this.boardClickListener = clickListener;
-    }
-
-
-    public static final CountDownLatch latch = new CountDownLatch(1);
-    public static GuiGraphics GuiGraphics = null;
-
-    public static GuiGraphics waitForGuiGraphics() {
-        try {
-            latch.await();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        return GuiGraphics;
-    }
-
-    public static void setGuiGraphics(GuiGraphics GuiGraphics0) {
-        GuiGraphics = GuiGraphics0;
-        latch.countDown();
-    }
-
-    public GuiGraphics() {
-        setGuiGraphics(this);
-    }
-
-    public static void main(String[] args) {
-        Application.launch(args);
-    }
-
-    public static GuiGraphics getInstance() {
-        new Thread(() -> Application.launch(GuiGraphics.class)).start();
-        //UI takes time to load
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        return waitForGuiGraphics();
     }
 }
