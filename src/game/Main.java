@@ -1,47 +1,18 @@
 package game;
 
-import java.util.concurrent.TimeUnit;
-
-import GuiTools.SettingsFactory;
-import GuiTools.VisualSettings;
-import GuiTools.VisualSettingsFromFile;
 import graphics.GraphicsHandler;
 import graphics.guiGraphics;
+import guiTools.SettingsFactory;
 import rules.GameRules;
 import rules.NormalRules;
 
 public class Main {
-    public static void main(String[] args) {
-    	/**
-        GuiManager guiManager = GuiManager.getInstance();
-        GameUiManager gameUiManager = guiManager.getGameGuiManager();
-        gameUiManager.setCurrentPlayer(true);
-        gameUiManager.setP1Color(Color.BLACK);
-//        guiManager.showAlert("good");
-        Cell[][] board = new Cell[(int) 6][(int) 6];
-        for (int i = 0; i < 6; i++) {
-            for (int j = 0; j < 6; j++) {
-                board[i][j] = Cell.EMPTY;
-            }
-        }
-        final boolean[] p1Turn = {false};
-        gameUiManager.drawBoard(board);
-        gameUiManager.setP1Score(13);
-        gameUiManager.setP2Score(15);
-
-
-        gameUiManager.setBoardClickListener((integer, integer2) -> {
-            board[integer][integer2] = (p1Turn[0] ? Cell.O : Cell.X);
-            gameUiManager.drawBoard(board);
-            p1Turn[0] = !p1Turn[0];
-            gameUiManager.setCurrentPlayer(p1Turn[0]); 
-        }); **/
-    	SettingsFactory.createFromFile();
-    	VisualSettings settings = VisualSettingsFromFile.getInstance();
-    	Board gameBoard = new Board();
+	public static void main(String[] args) {
+		SettingsFactory.createFromFile();
+		Board gameBoard = new Board();
 		GameRules rules = new NormalRules();
 		GraphicsHandler graphics = new guiGraphics(gameBoard);
-	    Game game = new Game(graphics, rules, gameBoard);
-	    game.run();
-    }
+		Game game = new Game(graphics, rules, gameBoard);
+		game.run();
+	}
 }

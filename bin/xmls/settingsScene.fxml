@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+
+<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="screenControllers.SettingsScreen">
+  <children>
+    <MenuBar VBox.vgrow="NEVER">
+      <menus>
+        <Menu mnemonicParsing="false" text="File">
+          <items>
+            <MenuItem mnemonicParsing="false" text="New" />
+            <MenuItem mnemonicParsing="false" text="Open…" />
+            <Menu mnemonicParsing="false" text="Open Recent" />
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem mnemonicParsing="false" text="Close" />
+            <MenuItem mnemonicParsing="false" text="Save" />
+            <MenuItem mnemonicParsing="false" text="Save As…" />
+            <MenuItem mnemonicParsing="false" text="Revert" />
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem mnemonicParsing="false" text="Preferences…" />
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem mnemonicParsing="false" text="Quit" />
+          </items>
+        </Menu>
+        <Menu mnemonicParsing="false" text="Edit">
+          <items>
+            <MenuItem mnemonicParsing="false" text="Undo" />
+            <MenuItem mnemonicParsing="false" text="Redo" />
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem mnemonicParsing="false" text="Cut" />
+            <MenuItem mnemonicParsing="false" text="Copy" />
+            <MenuItem mnemonicParsing="false" text="Paste" />
+            <MenuItem mnemonicParsing="false" text="Delete" />
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem mnemonicParsing="false" text="Select All" />
+            <MenuItem mnemonicParsing="false" text="Unselect All" />
+          </items>
+        </Menu>
+        <Menu mnemonicParsing="false" text="Help">
+          <items>
+            <MenuItem mnemonicParsing="false" text="About MyHelloApp" />
+          </items>
+        </Menu>
+      </menus>
+    </MenuBar>
+    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
+      <children>
+            <VBox layoutX="67.0" layoutY="105.0" prefHeight="250.0" prefWidth="424.0" spacing="16.0">
+               <children>
+                  <HBox prefHeight="29.0" prefWidth="245.0" spacing="50.0">
+                     <children>
+                        <RadioButton fx:id="p1StartsButton" mnemonicParsing="false" onAction="#p1Starts" text="p1 starts">
+                           <toggleGroup>
+                              <ToggleGroup fx:id="group" />
+                           </toggleGroup>
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </RadioButton>
+                        <RadioButton fx:id="p2StartsButton" mnemonicParsing="false" onAction="#p2Starts" text="p2 starts" toggleGroup="$group">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </RadioButton>
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="37.0" prefWidth="300.0" spacing="10.0">
+                     <children>
+                        <Label prefHeight="28.0" prefWidth="99.0" text="p1 Color:">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                        <ColorPicker fx:id="p1ColorPicker" onAction="#pickColorP1" />
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="35.0" prefWidth="322.0" spacing="35.0">
+                     <children>
+                        <Label text="p2 Color:">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                        <ColorPicker fx:id="p2ColorPicker" onAction="#pickColorP2" />
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="29.0" prefWidth="419.0" spacing="18.0">
+                     <children>
+                        <Label text="Board size:">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                        <Slider fx:id="slider" blockIncrement="1.0" majorTickUnit="1.0" max="20.0" min="4.0" minorTickCount="0" onMouseDragExited="#sliderReleased" onMouseReleased="#sliderReleased" prefHeight="26.0" prefWidth="300.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="4.0" />
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="53.0" prefWidth="415.0">
+                     <children>
+                        <Button fx:id="returnButton" mnemonicParsing="false" onAction="#returnHome" prefHeight="57.0" prefWidth="306.0" text="Save Settings and return home">
+                           <font>
+                              <Font name="KacstDigital" size="18.0" />
+                           </font></Button>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+            <HBox layoutX="189.0" layoutY="25.0" prefHeight="61.0" prefWidth="313.0">
+               <children>
+                  <Label prefHeight="53.0" prefWidth="394.0" text="Configure Settings" textFill="#298019">
+                     <font>
+                        <Font name="Kinnari Bold" size="35.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+      </children>
+    </AnchorPane>
+  </children>
+</VBox>

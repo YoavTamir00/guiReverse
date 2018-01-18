@@ -5,24 +5,24 @@ import game.Cell;
 import game.CellCollection;
 
 public interface GraphicsHandler {
-	
-    public void printCurrentBoard();
-	
-    public void illegalMoveAlert(Cell cell);
 
-    public Cell pickMove(String name);
+	void printCurrentBoard();
 
-    public void showWinner(String winner);
+	void illegalMoveAlert(Cell cell);
 
-    public void noAvailableMoves(String name);
+	Cell pickMove(String name);
 
-    public void draw() ;
-    
-    public void mainMenu();
-    
-    public void setP1Playing(boolean isP1);
-    
-    public void setP1Score(int score);
-    
-    public void setP2Score(int score);
+	void showWinner(String winner);
+
+	void noAvailableMoves(String name);
+
+	void draw();
+
+	void mainMenu();
+
+	void setP1Playing(boolean isP1);
+
+	void setP1Score(int score);
+
+	void setP2Score(int score);
 }
