@@ -1,0 +1,59 @@
+commit f6f3c93e513b82ea07996f162be454b3acf660b6
+Author: ohadshachor123 <ohadshachor123@gmail.com>
+Date:   Thu Jan 18 17:58:34 2018 +0200
+
+    Screens are now read from XML files, some more bug fixed
+
+commit 4fcadb8df85c42e66136165d8a17db5f36e0219b
+Author: ohadshachor123 <ohadshachor123@gmail.com>
+Date:   Thu Jan 18 12:23:14 2018 +0200
+
+    fixed shitloads of bugs. Game should function perfectly.
+
+commit 6488a0f232ebe57199f6b17bf4cda236933b9568
+Author: ohadshachor123 <ohadshachor123@gmail.com>
+Date:   Thu Jan 18 02:09:02 2018 +0200
+
+    settings are read from a file and apply to the game
+
+commit 151e0b630b900e67993c4cda9bc11cb44980aa8e
+Author: ohadshachor123 <ohadshachor123@gmail.com>
+Date:   Wed Jan 17 18:36:50 2018 +0200
+
+    rewtore all the code from ex2
+
+commit 8791de27a97f6c5c58f50fc07bf07da81b0de50f
+Author: ohadshachor123 <ohadshachor123@gmail.com>
+Date:   Tue Jan 16 17:43:39 2018 +0200
+
+    testing a commit
+
+commit b7d25553097bbe659ac3670cc378cfeb9b886e16
+Author: Yoav Tamir <Yoavtamir00@gmail.com>
+Date:   Mon Jan 15 02:37:42 2018 +0200
+
+    amazing new game!
+
+commit d7de6c4cefa0f7f2562c17bb3df4b5c43ee6905a
+Author: Yoav Tamir <Yoavtamir00@gmail.com>
+Date:   Mon Jan 15 01:36:41 2018 +0200
+
+    commiting before trying some chages
+
+commit 41fc19088d3cad03dd605d59a73e23cb1b17ea16
+Author: Yoav Tamir <Yoavtamir00@gmail.com>
+Date:   Sun Jan 14 18:45:26 2018 +0200
+
+    board working good
+
+commit 1888f373316a8ac5855418d25cef91a7a819af56
+Author: Yoav Tamir <Yoavtamir00@gmail.com>
+Date:   Sun Jan 14 18:34:06 2018 +0200
+
+    Added Ui interface
+
+commit 6628f8b4fb6295fc7bc342c2a4353b63f35e8e0a
+Author: Yoav Tamir <Yoavtamir00@gmail.com>
+Date:   Sun Jan 14 17:43:10 2018 +0200
+
+    initial commit

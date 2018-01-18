@@ -6,36 +6,37 @@ import game.Cell;
 import game.CellCollection;
 
 public abstract class GamePlayer {
-	private Tile myTile;
-	protected String name;
+    protected String name;
+    private Tile myTile;
 
-	public GamePlayer(Tile g) {
-		this(g, "");
-	}
+    public GamePlayer(Tile g) {
+        this(g, "");
+    }
 
-	GamePlayer(Tile g, String n) {
-		this.myTile = g;
-		this.name = n;
-	}
+    GamePlayer(Tile g, String n) {
+        this.myTile = g;
+        this.name = n;
+    }
 
-	// Passing the possible moves might help, a PC Tile for example, to pick a
-	// move.
-	public abstract Cell decideMove(Board b, CellCollection possibleMoves);
+    // Passing the possible moves might help, a PC Tile for example, to pick a
+    // move.
+    public abstract Cell decideMove(Board b, CellCollection possibleMoves);
 
-	public Tile getTile() {
-		return myTile;
-	}
+    // Getters/Setters.
+    public Tile getTile() {
+        return myTile;
+    }
 
-	public void setTile(Tile t) {
-		this.myTile = t;
-	}
+    public void setTile(Tile t) {
+        this.myTile = t;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
 }

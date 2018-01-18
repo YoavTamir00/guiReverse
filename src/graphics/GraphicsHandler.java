@@ -1,28 +1,27 @@
 package graphics;
 
-import constants.Tile;
 import game.Cell;
-import game.CellCollection;
 
+// All the functions the GameFlow needs to do on the gui.
 public interface GraphicsHandler {
 
-	void printCurrentBoard();
+    void printCurrentBoard();
 
-	void illegalMoveAlert(Cell cell);
+    void illegalMoveAlert(Cell cell);
 
-	Cell pickMove(String name);
+    Cell pickMove(String name);
 
-	void showWinner(String winner);
+    void showWinner(String winner);
 
-	void noAvailableMoves(String name);
+    void noAvailableMoves(String name);
 
-	void draw();
+    void draw();
 
-	void mainMenu();
+    void mainMenu();
 
-	void setP1Playing(boolean isP1);
+    void setP1Playing(boolean isP1);
 
-	void setP1Score(int score);
+    void setP1Score(int score);
 
-	void setP2Score(int score);
+    void setP2Score(int score);
 }
