@@ -1,5 +1,7 @@
 package game;
 
+import java.util.concurrent.TimeUnit;
+
 import GuiTools.SettingsFactory;
 import GuiTools.VisualSettings;
 import GuiTools.VisualSettingsFromFile;
@@ -34,9 +36,11 @@ public class Main {
             p1Turn[0] = !p1Turn[0];
             gameUiManager.setCurrentPlayer(p1Turn[0]); 
         }); **/
+    	SettingsFactory.createFromFile();
+    	VisualSettings settings = VisualSettingsFromFile.getInstance();
     	Board gameBoard = new Board();
-		GraphicsHandler graphics = new guiGraphics(gameBoard);
 		GameRules rules = new NormalRules();
+		GraphicsHandler graphics = new guiGraphics(gameBoard);
 	    Game game = new Game(graphics, rules, gameBoard);
 	    game.run();
     }

@@ -14,7 +14,8 @@ public abstract class VisualSettings implements Serializable{
 	protected String p1Color, p2Color;
 	protected double boardDimension;
 	protected Tile startingPlayer;
-		
+	protected boolean gameReady;
+	
 	public Color p1Color() {
 		return Color.valueOf(p1Color);
 	}
@@ -44,4 +45,12 @@ public abstract class VisualSettings implements Serializable{
 		startingPlayer = s;
 	}
 	public abstract void save();
+	
+	public boolean getGameReady() {
+		return gameReady;
+	}
+	
+	public void setGameReady(boolean r) {
+		gameReady = r;
+	}
 }

@@ -34,9 +34,14 @@ public class GameFlow {
             //Figuring out who is playing right now.
             if (i == 1) {
                 currentPlayer = p1;
+                gui.setP1Playing(true);
             } else {
                 currentPlayer = p2;
+                gui.setP1Playing(false);
             }
+            gui.setP1Score(board.countTile(p1.getTile()));
+            gui.setP2Score(board.countTile(p2.getTile()));
+
             // Calculating the possible moves for this player
             CellCollection possible = rules.allPossibleMoves(board, currentPlayer.getTile());
             // no possible moves for the current player
@@ -53,7 +58,6 @@ public class GameFlow {
             }
             // Choose a move
             gui.printCurrentBoard();
-            gui.setPlayingPlayer(currentPlayer.getTile());
             Cell move = currentPlayer.decideMove(board, possible);
             // if the move is valid, apply it.
             if (rules.validateMove(board, move, currentPlayer.getTile())) {
@@ -81,4 +85,5 @@ public class GameFlow {
             gui.draw();
         }
     }
+    
 }

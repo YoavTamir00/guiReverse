@@ -17,8 +17,10 @@ public class MenuScreen extends VBox {
 	private void initButtons() {
 		Button openGame = new Button("Start Game");
 		openGame.setOnAction(event-> {
-			this.setVisible(false);
+			VisualSettings settings = VisualSettingsFromFile.getInstance();
 			gameScreen.resetValues();
+			settings.setGameReady(true);
+			this.setVisible(false);
 			gameScreen.setVisible(true);
 		});
 		Button openSettings = new Button("OpenSettings");

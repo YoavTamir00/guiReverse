@@ -25,15 +25,8 @@ public class GuiManager extends Application {
     
     public GuiManager() {
         setGuiManager(this);
-    	settings = SettingsFactory.fromFile();
+    	settings = VisualSettingsFromFile.getInstance();
     }
-    
-    public VisualSettings getSettings() {
-    	return settings;
-    }
-
-
-
 
     public static final CountDownLatch latch = new CountDownLatch(1);
     public static GuiManager GuiManager = null;
@@ -105,7 +98,7 @@ public class GuiManager extends Application {
     }
 
     private void initMenu(Stage primaryStage) {
-
+    	/**
         MenuBar menuBar = new MenuBar();
         menuBar.prefWidthProperty().bind(primaryStage.widthProperty());
 
@@ -136,7 +129,8 @@ public class GuiManager extends Application {
         root.getChildren().add(menuBar);
 
     }
-    
+    **/
+    }
 
     public GameScreen getGameScreen() {
     	return gameScreen;

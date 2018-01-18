@@ -39,11 +39,11 @@ public class Board {
 	        }
 	    }
 	    
-	    int middle = dimension / 2 -2;
+	    int middle = dimension / 2 - 1;
 	    board[middle][middle] = Tile.O;
-	    board[middle-1][middle-1] = Tile.O;
-	    board[middle][middle-1] = Tile.X;
-	    board[middle-1][middle] = Tile.X;
+	    board[middle + 1][middle + 1] = Tile.O;
+	    board[middle + 1][middle] = Tile.X;
+	    board[middle][middle + 1] = Tile.X;
 	    numTaken += 4;
 	}
 	
@@ -92,5 +92,17 @@ public class Board {
                 changeCell(current, Tile.X);
             }
     	}
+    }
+    
+    public int countTile(Tile player) {
+    	int count = 0;
+    	for(int i = 0; i < dimension; i++) {
+    		for (int j=0; j < dimension; j++) {
+    			if (board[i][j] == player) {
+    				count++;
+    			}
+    		}
+    	}
+    	return count;
     }
 }

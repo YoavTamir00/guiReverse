@@ -17,10 +17,12 @@ public interface GraphicsHandler {
     public void noAvailableMoves(String name);
 
     public void draw() ;
-
-    public void printGameStarts(Tile startingPlayer);
     
     public void mainMenu();
     
-    public void setPlayingPlayer(Tile player);
+    public void setP1Playing(boolean isP1);
+    
+    public void setP1Score(int score);
+    
+    public void setP2Score(int score);
 }

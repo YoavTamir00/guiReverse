@@ -15,7 +15,7 @@ public class guiGraphics implements GraphicsHandler {
 	private Board board;
 	private GuiManager gui;
 	private GameUiManager guiController;
-	private static int row,col;
+	private static int row = -1,col;
 	public guiGraphics(Board gameBoard) {
 		this.board = gameBoard;
 	}
@@ -38,7 +38,7 @@ public class guiGraphics implements GraphicsHandler {
 			guiGraphics.col = y;
 		};
 		guiController.setBoardClickListener(moveListener);
-		while (row == 0) {
+		while (row == -1) {
 			try {
 				TimeUnit.MILLISECONDS.sleep(200);
 			} catch (InterruptedException e) {
@@ -48,7 +48,7 @@ public class guiGraphics implements GraphicsHandler {
 		}
 		guiController.setBoardClickListener(null);
 		int x = row, y = col;
-		row = 0;
+		row = -1;
 		System.out.println(new Cell(x,y));
 		return new Cell(x,y);
 	}
@@ -68,23 +68,20 @@ public class guiGraphics implements GraphicsHandler {
 		guiController.showAlert("The game ended in a draw.");
 	}
 
-	@Override
-	public void printGameStarts(Tile startingPlayer) {
-		setPlayingPlayer(startingPlayer);
-	}
-
 
 	@Override
 	public void printCurrentBoard() {
 		guiController.drawBoard(board.getBoard());
 	}
 	
-	public void setPlayingPlayer(Tile player) {
-		boolean isP1 = true;
-		if (player == Tile.O) {
-			isP1 = false;
-		}
+	public void setP1Playing(boolean isP1) {
 		guiController.setCurrentPlayer(isP1);
 	}
-
-}
+	
+	public void setP2Score(int score) {
+		guiController.setP2Score(score);
+	}
+	
+	public void setP1Score(int score) {
+		guiController.setP1Score(score);
+	}}

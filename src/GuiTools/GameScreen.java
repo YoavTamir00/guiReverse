@@ -10,6 +10,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import utils.Parsing;
 
 import java.util.function.BiConsumer;
@@ -43,7 +44,7 @@ public class GameScreen extends HBox implements GameUiManager {
         resetValues();
         this.initEmptyBoard();
         currentPlayerLabel = new Label("Current Player: p1");
-        currentPlayerLabel.setFont(new Font("Arial", FONT_SIZE));
+        currentPlayerLabel.setFont(Font.font("Arial", FontWeight.BOLD, FONT_SIZE));
         p1ScoreLabel = new Label("p1 scores: 0");
         p1ScoreLabel.setFont(new Font("Arial", FONT_SIZE));
         p2ScoreLabel = new Label("p2 scores: 0");
@@ -147,7 +148,7 @@ public class GameScreen extends HBox implements GameUiManager {
         for (int x = 0; x < board.length; x++) {
             for (int y = 0; y < board.length; y++) {
                 if (board[x][y] != Tile.Empty) {
-                    drawCell(x, y, board[x][y] == Tile.O ? p1Color : p2Color);
+                    drawCell(y, x, board[x][y] == Tile.O ? p1Color : p2Color);
                 }
             }
         }
@@ -168,7 +169,12 @@ public class GameScreen extends HBox implements GameUiManager {
     @Override
     public void setCurrentPlayer(boolean isP1) {
         Platform.runLater(() -> {
-            currentPlayerLabel.setText("Current Player is: " + (isP1 ? "p1, ": "p2, "));
+            currentPlayerLabel.setText("Current Player is: " + (isP1 ? "p1": "p2"));
+            if (isP1) {
+            	currentPlayerLabel.setTextFill(p1Color);
+            } else {
+            	currentPlayerLabel.setTextFill(p2Color);
+            }
         });
 
     }

@@ -14,28 +14,40 @@ public class VisualSettingsFromFile extends VisualSettings{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	/**
+	 * 
+	 */
+	private static VisualSettingsFromFile INSTANCE = null;
 	private String fileName;
 	
-	public VisualSettingsFromFile(String fileName) {
+	private VisualSettingsFromFile(String fileName) {
 		super();
-		initCleanSettings();
-		this.fileName = fileName;
+		initCleanSettings(fileName);
 	}
 	
-	public VisualSettingsFromFile(VisualSettings copy, String fileName) {
-		super();
+    public static VisualSettingsFromFile getInstance() {
+        if(INSTANCE == null) {
+            INSTANCE = new VisualSettingsFromFile("");
+        }
+         
+        return INSTANCE;
+    }
+	public void loadFromCopy(VisualSettings copy, String fileName) {
 		this.fileName = fileName;
-		p1Color = copy.p1Color().toString();
-		p2Color = copy.p2Color().toString();
+		setP1Color(copy.p1Color());
+		setP2Color(copy.p2Color());
 		boardDimension = copy.boardDimension();
 		startingPlayer = copy.startingPlayer();
+		this.gameReady = false;
 	}
 	
-	private void initCleanSettings() {
+	public void initCleanSettings(String fileName) {
 		p1Color = Color.BLACK.toString();
 		p2Color = Color.WHITE.toString();
 		boardDimension = 8;
 		startingPlayer = Tile.X;
+		this.gameReady = false;
+		this.fileName = fileName;
 	}
 	
 	public void save() {

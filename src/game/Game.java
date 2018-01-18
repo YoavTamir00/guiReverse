@@ -1,5 +1,9 @@
 package game;
 
+import java.util.concurrent.TimeUnit;
+
+import GuiTools.VisualSettings;
+import GuiTools.VisualSettingsFromFile;
 import constants.Tile;
 import graphics.GraphicsHandler;
 import players.GamePlayer;
@@ -19,8 +23,27 @@ public class Game {
 	
 	private void runMainWindow() {
 		graphics.mainMenu();
-		p1 = new HumanPlayer(Tile.X, graphics);
-		p2 = new HumanPlayer(Tile.O, graphics);
+		VisualSettings settings = VisualSettingsFromFile.getInstance();
+		// Wait until the user has configured all the settings.
+    	while(!settings.getGameReady()) {
+			try {
+				TimeUnit.MILLISECONDS.sleep(100);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	}
+		System.out.println("Wait loop Done");
+
+    	if(settings.startingPlayer() == Tile.X) {
+    		p1 = new HumanPlayer(Tile.X, graphics);
+    		p2 = new HumanPlayer(Tile.O, graphics);
+    	} else {
+    		p1 = new HumanPlayer(Tile.O, graphics);
+    		p2 = new HumanPlayer(Tile.X, graphics);
+    	}
+    	gameBoard.initializeBoard((int)settings.boardDimension());
+
 
 		GameFlow g = new GameFlow(p1, p2, rules, graphics);
 		g.runGame(gameBoard);

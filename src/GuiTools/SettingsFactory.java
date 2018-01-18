@@ -6,21 +6,21 @@ import java.io.ObjectInputStream;
 public class SettingsFactory {
 	public static String DEFAULT_FILE = "settings.ser";
 
-	public static VisualSettingsFromFile fromFile() {
-		return SettingsFactory.fromFile(DEFAULT_FILE);
+	public static void createFromFile() {
+		SettingsFactory.createFromFile(DEFAULT_FILE);
 	}
 	
-	public static VisualSettingsFromFile fromFile(String fileName) {
+	public static void createFromFile(String fileName) {
+		VisualSettingsFromFile ans = VisualSettingsFromFile.getInstance();
 		try {
 		ObjectInputStream objInput = new ObjectInputStream(new FileInputStream(fileName));
 		VisualSettings settings = (VisualSettingsFromFile)(objInput.readObject());
-		VisualSettingsFromFile ans = new VisualSettingsFromFile(settings,fileName);
 		objInput.close();
-		return ans;
+		ans.loadFromCopy(settings, fileName);
 		} catch (Exception e) {
 			System.out.println("Caught an exception, reading default settings");
 			e.printStackTrace();
-			return new VisualSettingsFromFile(fileName);
+			ans.initCleanSettings(fileName);
 		}
 	}
 }
